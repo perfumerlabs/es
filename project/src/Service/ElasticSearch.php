@@ -221,6 +221,34 @@ class ElasticSearch
     }
 
     /**
+     * Add array of documents in index
+     *
+     * @param string $index
+     * @param array  $data
+     */
+    public function addDocuments(string $index, array $data): void
+    {
+        if ($this->dummy) {
+            return;
+        }
+
+        $elasticIndex = $this->client->getIndex($index);
+
+        $elasticType = $elasticIndex->getType($index);
+
+        foreach (array_chunk($data, 500) as $chunk) {
+            $documents = [];
+            foreach ($chunk as $item) {
+                $documents[] = new Document($item['id'] ?? null, $item);
+            }
+
+            $elasticType->addDocuments($documents);
+        }
+
+        $elasticIndex->refresh();
+    }
+
+    /**
      * Delete document from index by id
      *
      * @param string $index

@@ -11,6 +11,8 @@ return [
                 $r->addRoute('GET',    '/document', 'document.get');
                 $r->addRoute('POST',   '/document', 'document.post');
                 $r->addRoute('DELETE', '/document', 'document.delete');
+
+                $r->addRoute('POST',   '/documents', 'documents.post');
             });
         }
     ],
