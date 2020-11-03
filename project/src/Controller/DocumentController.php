@@ -37,7 +37,7 @@ class DocumentController extends LayoutController
 
         $data = $elasticsearch->search($index, $fields, $search, $locale);
 
-        $this->setContent($data);
+        $this->setContent(['items' => $data]);
     }
 
     public function post()
