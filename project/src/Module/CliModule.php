@@ -1,14 +1,14 @@
 <?php
 
-namespace Queue\Module;
+namespace Es\Module;
 
 use Perfumer\Framework\Controller\Module;
 
 class CliModule extends Module
 {
-    public $name = 'queue';
+    public $name = 'es';
 
     public $router = 'router.console';
 
-    public $request = 'queue.request';
+    public $request = 'es.request';
 }

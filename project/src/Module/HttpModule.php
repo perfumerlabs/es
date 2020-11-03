@@ -1,16 +1,16 @@
 <?php
 
-namespace Queue\Module;
+namespace Es\Module;
 
 use Perfumer\Framework\Controller\Module;
 
 class HttpModule extends Module
 {
-    public $name = 'queue';
+    public $name = 'es';
 
-    public $router = 'queue.router';
+    public $router = 'es.router';
 
-    public $request = 'queue.request';
+    public $request = 'es.request';
 
     public $components = [
         'view' => 'view.status',

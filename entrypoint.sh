@@ -11,10 +11,6 @@ if [ "$1" = 'supervisord' ] || [ "$1" = '' ]; then
         fi
 
         current_owner=`ls -ld . | awk '{print $3}'`
-
-        if [ $current_owner != 'tarantool' ]; then
-            chown -R tarantool:tarantool /var/lib/tarantool
-        fi
     fi
 
     exec /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf $1

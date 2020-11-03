@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'tarantool' => [
-        'host' => '127.0.0.1',
-        'port' => '3301',
+    'elasticsearch' => [
+        'host' => 'ES_HOST', // 185.22.65.171
+        'port' => 'ES_PORT', // 9200
     ],
 ];

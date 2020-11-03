@@ -1,6 +1,6 @@
 <?php
 
-namespace Queue\Controller;
+namespace Es\Controller;
 
 class TestController extends LayoutController
 {

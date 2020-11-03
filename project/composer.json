@@ -1,12 +1,17 @@
 {
-    "name": "perfumerlabs/queue",
+    "name": "perfumerlabs/es-html",
     "type": "library",
-    "description": "Queue docker container",
+    "description": "ES HTML docker container",
     "homepage": "https://perfumerlabs.com",
     "authors": [
         {
             "name": "Ilyas Makashev",
             "email": "mehmatovec@gmail.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Nurbek Torbayev",
+            "email": "torbayevnurbek1992@gmail.com",
             "role": "Developer"
         }
     ],
@@ -17,10 +22,9 @@
         "symfony/console": "~5",
         "symfony/http-foundation": "~5",
         "nikic/fast-route": "~1",
-        "tarantool/queue": "v0.7.0",
-        "tarantool/client": "v0.4.1",
         "rybakit/msgpack": "v0.5.4",
         "guzzlehttp/guzzle": "~7",
+        "ruflin/elastica": "6.1.1",
         "ext-json": "*"
     },
     "require-dev": {
@@ -29,7 +33,7 @@
     "autoload": {
         "psr-4": {
             "Project\\": "src/",
-            "Queue\\": "src/"
+            "Es\\": "src/"
         }
     },
     "autoload-dev": {

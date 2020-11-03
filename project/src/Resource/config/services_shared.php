@@ -6,14 +6,13 @@ return [
         'class' => 'Project\\Gateway',
         'arguments' => ['#application', '#gateway.http', '#gateway.console']
     ],
-
-    'tarantool' => [
+    'elasticsearch' => [
         'shared' => true,
-        'init' => function(\Perfumer\Component\Container\Container $container) {
-            $connection = new \Tarantool\Client\Connection\StreamConnection();
-            $packer = new \Tarantool\Client\Packer\PurePacker();
-
-            return new Tarantool\Client\Client($connection, $packer);
-        }
+        'class' => 'Es\\Service\\ElasticSearch',
+        'arguments' => [
+            '@elasticsearch/host',
+            '@elasticsearch/port',
+            false
+        ]
     ],
 ];

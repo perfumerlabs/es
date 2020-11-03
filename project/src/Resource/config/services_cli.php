@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'queue.request' => [
+    'es.request' => [
         'class' => 'Perfumer\\Framework\\Proxy\\Request',
         'arguments' => ['$0', '$1', '$2', '$3', [
-            'prefix' => 'Queue\\Command',
+            'prefix' => 'Es\\Command',
             'suffix' => 'Command'
         ]]
-    ]
+    ],
 ];

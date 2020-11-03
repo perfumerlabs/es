@@ -8,7 +8,7 @@ class Gateway extends CompositeGateway
 {
     protected function configure(): void
     {
-        $this->addModule('queue', 'QUEUE_HOST', null, 'http');
-        $this->addModule('queue', 'queue',      null, 'cli');
+        $this->addModule('es_html', 'ES_HTML_HOST', null, 'http');
+        $this->addModule('es_html', 'es_html',      null, 'cli');
     }
 }

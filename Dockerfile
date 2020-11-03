@@ -4,7 +4,7 @@ MAINTAINER Ilyas Makashev <mehmatovec@gmail.com>
 
 RUN set -x \
     && apt-get update && apt-get install -y --no-install-recommends ca-certificates wget locales && rm -rf /var/lib/apt/lists/* \
-    && useradd -s /bin/bash -m queue \
+    && useradd -s /bin/bash -m es_html \
     && echo "deb http://nginx.org/packages/ubuntu/ xenial nginx" > /etc/apt/sources.list.d/nginx.list \
     && echo "deb-src http://nginx.org/packages/ubuntu/ xenial nginx" >> /etc/apt/sources.list.d/nginx.list \
     && echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" > /etc/apt/sources.list.d/php.list \
@@ -31,34 +31,25 @@ RUN set -x \
         gnupg2 \
         lsb-release \
         apt-transport-https \
-    && curl http://download.tarantool.org/tarantool/2.2/gpgkey | sudo apt-key add - \
-    && release=`lsb_release -c -s` \
-    && sudo rm -f /etc/apt/sources.list.d/*tarantool*.list \
-    && echo "deb http://download.tarantool.org/tarantool/2.2/ubuntu/ ${release} main" | sudo tee /etc/apt/sources.list.d/tarantool_2_2.list \
-    && echo "deb-src http://download.tarantool.org/tarantool/2.2/ubuntu/ ${release} main" | sudo tee -a /etc/apt/sources.list.d/tarantool_2_2.list \
     && apt update \
-    && apt install -y \
-        tarantool \
-        tarantool-queue
+    && apt install -y
 
-COPY project /opt/queue
+COPY project /opt/es_html
 COPY nginx /usr/share/container_config/nginx
 COPY supervisor /usr/share/container_config/supervisor
-COPY queue.lua /etc/tarantool/instances.enabled/queue.lua
 COPY init.sh /usr/local/bin/init.sh
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
 RUN set -x\
-    && chown -R queue:queue /opt/queue \
-    && cd /opt/queue \
-    && sudo -u queue php composer.phar install --no-dev --prefer-dist \
+    && chown -R es_html:es_html /opt/es_html \
+    && cd /opt/es_html \
+    && sudo -u es_html php composer.phar install --no-dev --prefer-dist \
     && chmod +x /usr/local/bin/entrypoint.sh \
     && chmod +x /usr/local/bin/init.sh
 
-ENV QUEUE_HOST queue
-ENV QUEUE_WORKERS "{\"default\":1}"
-
-VOLUME /var/lib/tarantool
+ENV ES_HTML_HOST es_html
+ENV ES_HTML_PORT ""
+ENV ES_HOST ""
 
 EXPOSE 80
 

@@ -5,13 +5,17 @@ return [
         'shared' => true,
         'init' => function(\Perfumer\Component\Container\Container $container) {
             return \FastRoute\simpleDispatcher(function(\FastRoute\RouteCollector $r) {
-                $r->addRoute('POST', '/task', 'task.post');
-                $r->addRoute('POST', '/fraction', 'fraction.post');
+                $r->addRoute('POST',   '/index', 'index.post');
+                $r->addRoute('DELETE', '/index', 'index.delete');
+
+                $r->addRoute('GET',    '/document', 'document.get');
+                $r->addRoute('POST',   '/document', 'document.post');
+                $r->addRoute('DELETE', '/document', 'document.delete');
             });
         }
     ],
 
-    'queue.router' => [
+    'es.router' => [
         'shared' => true,
         'class' => 'Perfumer\\Framework\\Router\\Http\\FastRouteRouter',
         'arguments' => ['#gateway.http', '#fast_router', [
@@ -19,10 +23,10 @@ return [
         ]]
     ],
 
-    'queue.request' => [
+    'es.request' => [
         'class' => 'Perfumer\\Framework\\Proxy\\Request',
         'arguments' => ['$0', '$1', '$2', '$3', [
-            'prefix' => 'Queue\\Controller',
+            'prefix' => 'Es\\Controller',
             'suffix' => 'Controller'
         ]]
     ]
