@@ -21,7 +21,8 @@ return [
         'shared' => true,
         'class' => 'Perfumer\\Framework\\Router\\Http\\FastRouteRouter',
         'arguments' => ['#gateway.http', '#fast_router', [
-            'data_type' => 'json'
+            'data_type' => 'json',
+            'allowed_actions' => ['get', 'post', 'delete'],
         ]]
     ],
 

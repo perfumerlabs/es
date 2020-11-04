@@ -16,8 +16,6 @@ class DocumentsController extends LayoutController
 
         $documents = $this->f('documents');
 
-        $documents = json_decode($documents, true);
-
         if (!is_array($documents) || !count($documents)) {
             $this->forward('error', 'pageNotFound', ["Documents were not provided"]);
         }
