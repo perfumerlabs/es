@@ -22,12 +22,8 @@ class DocumentsController extends LayoutController
 
         $fields = $this->f('fields');
 
-        if (!$fields) {
+        if (!$fields || is_array($fields) && !count($fields)) {
             $this->forward('error', 'pageNotFound', ["Fields was not provided"]);
-        }
-
-        if (is_array(json_decode($fields, true))) {
-            $fields = json_decode($fields, true);
         }
 
         $locale = $this->f('locale', 'ru');
