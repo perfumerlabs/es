@@ -143,14 +143,20 @@ class ElasticSearch
     /**
      * Search in index by fields, search word and locale
      *
-     * @param string $index
+     * @param string       $index
      * @param array|string $fields
-     * @param string $searchWord
-     * @param string $locale
+     * @param string       $searchWord
+     * @param string       $locale
      * @return array
      */
-    public function search(string $index, $fields, string $searchWord, string $locale = 'ru'): array
-    {
+    public function search(
+        string $index,
+        $fields,
+        string $searchWord,
+        string $locale = 'ru',
+        int $from = 0,
+        int $size = 50
+    ): array {
         if ($this->dummy) {
             return [];
         }
@@ -173,6 +179,8 @@ class ElasticSearch
         }
 
         $queryData = [
+            'from'  => $from,
+            'size'  => $size,
             'query' => [
                 'bool' => [
                     'must'   => [
@@ -189,9 +197,7 @@ class ElasticSearch
             ],
         ];
 
-        $query = new Query(
-            $queryData
-        );
+        $query = new Query($queryData);
 
         $search->setQuery($query);
 
@@ -201,9 +207,9 @@ class ElasticSearch
     /**
      * Add document in index
      *
-     * @param string $index
+     * @param string       $index
      * @param array|string $data
-     * @param null   $id
+     * @param null         $id
      */
     public function addDocument(string $index, $data, $id = null): void
     {
@@ -251,7 +257,7 @@ class ElasticSearch
     /**
      * Delete document from index by id
      *
-     * @param string $index
+     * @param string     $index
      * @param int|string $id
      */
     public function deleteDocumentById(string $index, $id): void

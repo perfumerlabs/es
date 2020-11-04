@@ -28,10 +28,14 @@ class DocumentsController extends LayoutController
 
         $locale = $this->f('locale', 'ru');
 
+        $from = (int) $this->f('from', 0);
+
+        $size = (int) $this->f('size', 50);
+
         /** @var ElasticSearch $elasticsearch */
         $elasticsearch = $this->s('elasticsearch');
 
-        $data = $elasticsearch->search($index, $fields, $search, $locale);
+        $data = $elasticsearch->search($index, $fields, $search, $locale, $from, $size);
 
         $this->setContent(['items' => $data]);
     }
