@@ -8,10 +8,10 @@ return [
                 $r->addRoute('POST',   '/index', 'index.post');
                 $r->addRoute('DELETE', '/index', 'index.delete');
 
-                $r->addRoute('GET',    '/document', 'document.get');
                 $r->addRoute('POST',   '/document', 'document.post');
                 $r->addRoute('DELETE', '/document', 'document.delete');
 
+                $r->addRoute('GET',    '/documents', 'documents.get');
                 $r->addRoute('POST',   '/documents', 'documents.post');
             });
         }
