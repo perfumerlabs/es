@@ -1,10 +1,10 @@
 FROM ubuntu:xenial
 
-MAINTAINER Ilyas Makashev <mehmatovec@gmail.com>
+LABEL authors="Ilyas Makashev mehmatovec@gmail.com, Nurbek Torbayev torbayevnurbek1992@gmail.com"
 
 RUN set -x \
     && apt-get update && apt-get install -y --no-install-recommends ca-certificates wget locales && rm -rf /var/lib/apt/lists/* \
-    && useradd -s /bin/bash -m es_html \
+    && useradd -s /bin/bash -m es \
     && echo "deb http://nginx.org/packages/ubuntu/ xenial nginx" > /etc/apt/sources.list.d/nginx.list \
     && echo "deb-src http://nginx.org/packages/ubuntu/ xenial nginx" >> /etc/apt/sources.list.d/nginx.list \
     && echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu xenial main" > /etc/apt/sources.list.d/php.list \
@@ -34,22 +34,21 @@ RUN set -x \
     && apt update \
     && apt install -y
 
-COPY project /opt/es_html
+COPY project /opt/es
 COPY nginx /usr/share/container_config/nginx
 COPY supervisor /usr/share/container_config/supervisor
 COPY init.sh /usr/local/bin/init.sh
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
 RUN set -x\
-    && chown -R es_html:es_html /opt/es_html \
-    && cd /opt/es_html \
-    && sudo -u es_html php composer.phar install --no-dev --prefer-dist \
+    && chown -R es:es /opt/es \
+    && cd /opt/es \
+    && sudo -u es php composer.phar install --no-dev --prefer-dist \
     && chmod +x /usr/local/bin/entrypoint.sh \
     && chmod +x /usr/local/bin/init.sh
 
-ENV ES_HTML_HOST es_html
-ENV ES_HTML_PORT ""
-ENV ES_HOST ""
+ENV ES_HOST "elasticsearch"
+ENV ES_PORT 9200
 
 EXPOSE 80
 

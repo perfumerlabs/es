@@ -12,7 +12,6 @@ return [
         'arguments' => [
             '@elasticsearch/host',
             '@elasticsearch/port',
-            false
         ]
     ],
 ];

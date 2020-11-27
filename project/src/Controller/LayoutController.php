@@ -10,4 +10,11 @@ class LayoutController extends ViewController
 {
     use FastRouteRouterControllerHelpers;
     use StatusViewControllerHelpers;
+
+    protected function validateNotEmpty($var, $name)
+    {
+        if (!$var) {
+            $this->forward('error', 'badRequest', ["\"$name\" parameter must be set"]);
+        }
+    }
 }

@@ -1,13 +1,13 @@
 {
-    "name": "perfumerlabs/es-html",
+    "name": "perfumerlabs/es",
     "type": "library",
-    "description": "ES HTML docker container",
+    "description": "Elasticsearch docker container",
     "homepage": "https://perfumerlabs.com",
     "authors": [
         {
             "name": "Ilyas Makashev",
             "email": "mehmatovec@gmail.com",
-            "role": "Developer"
+            "role": "Maintainer"
         },
         {
             "name": "Nurbek Torbayev",
@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": ">=7.4",
-        "perfumer/framework": "0.9.1",
+        "perfumer/framework": "0.9.2",
         "pwfisher/command-line-php": "dev-master",
         "symfony/console": "~5",
         "symfony/http-foundation": "~5",

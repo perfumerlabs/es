@@ -36,7 +36,7 @@ class SettingsCommand extends PlainController
                 print_r('Index does not exist');
                 break;
             case 'search':
-                print_r($es->search($index, ['title', 'text'], 'test', 'ru'));
+                print_r($es->search($index, 'test', 'ru'));
                 break;
             case 'push':
                 $es->addDocument(

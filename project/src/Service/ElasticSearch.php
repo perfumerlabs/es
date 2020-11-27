@@ -10,18 +10,10 @@ use Elastica\Type\Mapping;
 
 class ElasticSearch
 {
-    protected bool                $dummy = false;
+    protected Client $client;
 
-    protected Client              $client;
-
-    public function __construct(string $host, string $port, bool $dummy)
+    public function __construct(string $host, string $port)
     {
-        $this->dummy = $dummy;
-
-        if ($this->dummy) {
-            return;
-        }
-
         $this->client = new Client(
             [
                 'host' => $host,
@@ -38,10 +30,6 @@ class ElasticSearch
      */
     public function createIndex(string $index): bool
     {
-        if ($this->dummy) {
-            return true;
-        }
-
         $elasticIndex = $this->client->getIndex($index);
 
         try {
@@ -80,10 +68,6 @@ class ElasticSearch
      */
     public function deleteIndex(string $index): bool
     {
-        if ($this->dummy) {
-            return true;
-        }
-
         $elasticIndex = $this->client->getIndex($index);
 
         try {
@@ -151,32 +135,14 @@ class ElasticSearch
      */
     public function search(
         string $index,
-        $fields,
         string $searchWord,
-        string $locale = 'ru',
+        string $locale,
         int $from = 0,
         int $size = 50
     ): array {
-        if ($this->dummy) {
-            return [];
-        }
-
         $search = new Search($this->client);
 
         $search->addIndex($index)->addType($index);
-
-        $queryShouldPart = [];
-        if (is_array($fields)) {
-            foreach ($fields as $field) {
-                $queryShouldPart[] = [
-                    'match' => [$field => $searchWord],
-                ];
-            }
-        } else {
-            $queryShouldPart[] = [
-                'match' => [$fields => $searchWord],
-            ];
-        }
 
         $queryData = [
             'from'  => $from,
@@ -185,7 +151,14 @@ class ElasticSearch
                 'bool' => [
                     'must'   => [
                         'bool' => [
-                            'should' => $queryShouldPart,
+                            'should' => [
+                                [
+                                    'match' => ['title' => $searchWord],
+                                ],
+                                [
+                                    'match' => ['text' => $searchWord],
+                                ]
+                            ],
                         ],
                     ],
                     'filter' => [
@@ -213,10 +186,6 @@ class ElasticSearch
      */
     public function addDocument(string $index, $data, $id = null): void
     {
-        if ($this->dummy) {
-            return;
-        }
-
         $elasticIndex = $this->client->getIndex($index);
 
         $elasticType = $elasticIndex->getType($index);
@@ -234,10 +203,6 @@ class ElasticSearch
      */
     public function addDocuments(string $index, array $data): void
     {
-        if ($this->dummy) {
-            return;
-        }
-
         $elasticIndex = $this->client->getIndex($index);
 
         $elasticType = $elasticIndex->getType($index);
@@ -262,10 +227,6 @@ class ElasticSearch
      */
     public function deleteDocumentById(string $index, $id): void
     {
-        if ($this->dummy) {
-            return;
-        }
-
         $elasticIndex = $this->client->getIndex($index);
 
         $elasticType = $elasticIndex->getType($index);
@@ -282,10 +243,6 @@ class ElasticSearch
      */
     public function deleteDocumentByQuery(string $index, string $field, $value): void
     {
-        if ($this->dummy) {
-            return;
-        }
-
         $query = new Query(
             [
                 'query' => [
@@ -305,10 +262,6 @@ class ElasticSearch
 
     private function setResult($results): array
     {
-        if ($this->dummy) {
-            return [];
-        }
-
         $completions = [];
         foreach ($results as $result) {
             $source        = $result->getData();
@@ -323,4 +276,3 @@ class ElasticSearch
         return $completions;
     }
 }
-

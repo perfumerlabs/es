@@ -8,31 +8,27 @@ class IndexController extends LayoutController
 {
     public function post()
     {
-        $index = $this->f('index');
+        $name = $this->f('name');
 
-        if (!$index) {
-            $this->forward('error', 'pageNotFound', ["Index was not provided"]);
-        }
+        $this->validateNotEmpty($name, 'name');
 
         /** @var ElasticSearch $elasticsearch */
         $elasticsearch = $this->s('elasticsearch');
 
-        $elasticsearch->createIndex($index);
+        $elasticsearch->createIndex($name);
 
-        $elasticsearch->defineMapping($index);
+        $elasticsearch->defineMapping($name);
     }
 
     public function delete()
     {
-        $index = $this->f('index');
+        $name = $this->f('name');
 
-        if (!$index) {
-            $this->forward('error', 'pageNotFound', ["Index was not provided"]);
-        }
+        $this->validateNotEmpty($name, 'name');
 
         /** @var ElasticSearch $elasticsearch */
         $elasticsearch = $this->s('elasticsearch');
 
-        $elasticsearch->deleteIndex($index);
+        $elasticsearch->deleteIndex($name);
     }
 }

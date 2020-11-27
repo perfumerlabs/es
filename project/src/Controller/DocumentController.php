@@ -8,20 +8,16 @@ class DocumentController extends LayoutController
 {
     public function post()
     {
-        $index = $this->f('index');
-
-        if (!$index) {
-            $this->forward('error', 'pageNotFound', ["Index was not provided"]);
-        }
-
         $id = $this->f('id');
+        $index = $this->f('index');
         $title = $this->f('title');
         $text = $this->f('text');
-        $locale = $this->f('locale', 'ru');
+        $locale = $this->f('locale');
 
-        if ($id === '') {
-            $id = null;
-        }
+        $this->validateNotEmpty($index, 'index');
+        $this->validateNotEmpty($id, 'id');
+        $this->validateNotEmpty($locale, 'locale');
+        $this->validateNotEmpty($text, 'text');
 
         /** @var ElasticSearch $elasticsearch */
         $elasticsearch = $this->s('elasticsearch');
@@ -37,16 +33,10 @@ class DocumentController extends LayoutController
     public function delete()
     {
         $index = $this->f('index');
-
-        if (!$index) {
-            $this->forward('error', 'pageNotFound', ["Index was not provided"]);
-        }
-
         $id = $this->f('id');
 
-        if (!$id) {
-            $this->forward('error', 'pageNotFound', ["ID was not provided"]);
-        }
+        $this->validateNotEmpty($index, 'index');
+        $this->validateNotEmpty($id, 'id');
 
         /** @var ElasticSearch $elasticsearch */
         $elasticsearch = $this->s('elasticsearch');
