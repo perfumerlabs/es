@@ -26,64 +26,53 @@ class ElasticSearch
      * Create index
      *
      * @param string $index
-     * @return bool
      */
-    public function createIndex(string $index): bool
+    public function createIndex(string $index)
     {
         $elasticIndex = $this->client->getIndex($index);
 
-        try {
-            $elasticIndex->create(
-                [
-                    'settings' => [
-                        'analysis' => [
-                            'analyzer' => [
-                                'standard_analyzer' => [
-                                    'char_filter' => ['html_strip'],
-                                    'tokenizer'   => 'standard',
-                                    'filter'      => ['lowercase'],
-                                ],
-                                'standard_search'   => [
-                                    'char_filter' => ['html_strip'],
-                                    'tokenizer'   => 'lowercase',
-                                ],
+        $elasticIndex->create(
+            [
+                'settings' => [
+                    'analysis' => [
+                        'analyzer' => [
+                            'standard_analyzer' => [
+                                'char_filter' => ['html_strip'],
+                                'tokenizer'   => 'standard',
+                                'filter'      => ['lowercase'],
+                            ],
+                            'standard_search'   => [
+                                'char_filter' => ['html_strip'],
+                                'tokenizer'   => 'lowercase',
                             ],
                         ],
                     ],
                 ],
-                false
-            );
+            ],
+            false
+        );
 
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
+        error_log(sprintf('Index "%s" is created', $index));
     }
 
     /**
      * Delete index
      *
      * @param string $index
-     * @return bool
      */
-    public function deleteIndex(string $index): bool
+    public function deleteIndex(string $index)
     {
         $elasticIndex = $this->client->getIndex($index);
 
-        try {
-            $elasticIndex->delete();
+        $elasticIndex->delete();
 
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
+        error_log(sprintf('Index "%s" is dropped', $index));
     }
 
     /**
      * Set fields mapping
      *
      * @param string $index
-     * @return bool
      */
     public function defineMapping(string $index)
     {
@@ -93,35 +82,31 @@ class ElasticSearch
 
         $elasticType = $elasticIndex->getType($index);
 
-        try {
-            $mapping->setType($elasticType);
-            $mapping->setProperties(
-                [
-                    'code'     => [
-                        'type' => 'string',
-                    ],
-                    'title'  => [
-                        'type'            => 'string',
-                        'analyzer'        => 'standard_analyzer',
-                        'search_analyzer' => 'standard_search',
-                    ],
-                    'text'   => [
-                        'type'            => 'text',
-                        'analyzer'        => 'standard_analyzer',
-                        'search_analyzer' => 'standard_search',
-                    ],
-                    'locale' => [
-                        'type' => 'keyword',
-                    ],
-                ]
-            );
+        $mapping->setType($elasticType);
+        $mapping->setProperties(
+            [
+                'code'     => [
+                    'type' => 'keyword',
+                ],
+                'locale' => [
+                    'type' => 'keyword',
+                ],
+                'title'  => [
+                    'type' => 'text',
+//                    'analyzer'        => 'standard_analyzer',
+//                    'search_analyzer' => 'standard_search',
+                ],
+                'text'   => [
+                    'type' => 'text',
+//                    'analyzer'        => 'standard_analyzer',
+//                    'search_analyzer' => 'standard_search',
+                ],
+            ]
+        );
 
-            $mapping->send();
+        $mapping->send();
 
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
+        error_log(sprintf('Mapping of index "%s" is defined', $index));
     }
 
     /**
@@ -193,6 +178,8 @@ class ElasticSearch
         $elasticType->addDocument(new Document($id, $data));
 
         $elasticIndex->refresh();
+
+        error_log(sprintf('Document with id = %s is saved', $id));
     }
 
     /**
@@ -209,8 +196,11 @@ class ElasticSearch
 
         foreach (array_chunk($data, 500) as $chunk) {
             $documents = [];
+
             foreach ($chunk as $item) {
                 $documents[] = new Document($item['id'] ?? null, $item);
+
+                error_log(sprintf('Document with id = %s is saved', $item['id']));
             }
 
             $elasticType->addDocuments($documents);
@@ -232,6 +222,8 @@ class ElasticSearch
         $elasticType = $elasticIndex->getType($index);
 
         $elasticType->deleteById($id);
+
+        error_log(sprintf('Document with id = %s is deleted', $id));
     }
 
     /**
@@ -258,6 +250,8 @@ class ElasticSearch
         $elasticType = $elasticIndex->getType($index);
 
         $elasticType->deleteByQuery($query);
+
+        error_log(sprintf('Documents by %s = %s are deleted', $index, $value));
     }
 
     private function setResult($results): array
