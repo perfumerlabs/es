@@ -79,7 +79,7 @@ Response example:
 
 Request parameters (json):
 - index [string,required] - name of the index.
-- id [integer,required] - unique identity of inserted document.
+- code [string,required] - unique identity of inserted content.
 - title [string,optional] - title of document.
 - text [string,required] - text of document.
 - locale [string,required] - locale of document.
@@ -89,7 +89,7 @@ Request example:
 ```json
 {
     "index": "foobar",
-    "id": 1,
+    "code": "1",
     "locale": "en",
     "title": "Hello",
     "text": "World"
@@ -111,7 +111,7 @@ Response example:
 Request parameters (json):
 - index [string,required] - name of the index.
 - documents [array,required] - array of documents to save.
-- documents.id [integer,required] - unique identity of inserted document.
+- documents.code [string,required] - unique identity of inserted content.
 - documents.title [string,optional] - title of document.
 - documents.text [string,required] - text of document.
 - documents.locale [string,required] - locale of document.
@@ -123,7 +123,7 @@ Request example:
     "index": "foobar",
     "documents": [
         {
-            "id": 1,
+            "code": "1",
             "locale": "en",
             "title": "Hello",
             "text": "World"
@@ -146,14 +146,15 @@ Response example:
 
 Request parameters (json or URL):
 - index [string,required] - index of elasticsearch.
-- id [integer,required] - unique identity of inserted document.
+- code [string,required] - unique identity of inserted content.
+- locale [string,optional] - locale of document.
 
 Request example:
 
 ```json
 {
     "index": "foobar",
-    "id": 1
+    "code": "1"
 }
 ```
 
@@ -187,7 +188,7 @@ Request example:
 ```
 
 Response parameters (json):
-- id [integer] - unique identity of inserted document.
+- code [string] - unique identity of inserted content.
 - title [string] - title of document.
 - text [string] - text of document.
 - locale [string] - locale of document.
@@ -200,7 +201,7 @@ Response example:
     "content": {
         "documents": [
             {
-                "id": 1,
+                "code": "1",
                 "locale": "en",
                 "title": "Hello",
                 "text": "World"

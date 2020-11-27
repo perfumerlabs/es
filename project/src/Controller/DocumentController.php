@@ -8,39 +8,48 @@ class DocumentController extends LayoutController
 {
     public function post()
     {
-        $id = $this->f('id');
+        $code = $this->f('code');
         $index = $this->f('index');
         $title = $this->f('title');
         $text = $this->f('text');
         $locale = $this->f('locale');
 
         $this->validateNotEmpty($index, 'index');
-        $this->validateNotEmpty($id, 'id');
+        $this->validateNotEmpty($code, 'code');
         $this->validateNotEmpty($locale, 'locale');
         $this->validateNotEmpty($text, 'text');
+
+        $document_id = $code . '_' . $locale;
 
         /** @var ElasticSearch $elasticsearch */
         $elasticsearch = $this->s('elasticsearch');
 
         $elasticsearch->addDocument($index, [
-            'id' => $id,
+            'code' => $code,
             'title' => $title,
             'text' => $text,
             'locale' => $locale
-        ], $id);
+        ], $document_id);
     }
 
     public function delete()
     {
         $index = $this->f('index');
-        $id = $this->f('id');
+        $code = $this->f('code');
+        $locale = $this->f('locale');
 
         $this->validateNotEmpty($index, 'index');
-        $this->validateNotEmpty($id, 'id');
+        $this->validateNotEmpty($code, 'code');
 
         /** @var ElasticSearch $elasticsearch */
         $elasticsearch = $this->s('elasticsearch');
 
-        $elasticsearch->deleteDocumentById($index, $id);
+        if ($locale) {
+            $document_id = $code . '_' . $locale;
+
+            $elasticsearch->deleteDocumentById($index, $document_id);
+        } else {
+            $elasticsearch->deleteDocumentByQuery($index, 'code', $code);
+        }
     }
 }

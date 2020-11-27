@@ -97,8 +97,8 @@ class ElasticSearch
             $mapping->setType($elasticType);
             $mapping->setProperties(
                 [
-                    'id'     => [
-                        'type' => 'integer',
+                    'code'     => [
+                        'type' => 'string',
                     ],
                     'title'  => [
                         'type'            => 'string',
@@ -266,7 +266,7 @@ class ElasticSearch
         foreach ($results as $result) {
             $source        = $result->getData();
             $completions[] = [
-                'id'     => $source['id'],
+                'code'   => $source['code'],
                 'title'  => $source['title'],
                 'text'   => $source['text'],
                 'locale' => $source['locale'],
