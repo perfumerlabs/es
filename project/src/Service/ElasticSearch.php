@@ -93,13 +93,13 @@ class ElasticSearch
                 ],
                 'title'  => [
                     'type' => 'text',
-//                    'analyzer'        => 'standard_analyzer',
-//                    'search_analyzer' => 'standard_search',
+                    'analyzer'        => 'standard_analyzer',
+                    'search_analyzer' => 'standard_search',
                 ],
                 'text'   => [
                     'type' => 'text',
-//                    'analyzer'        => 'standard_analyzer',
-//                    'search_analyzer' => 'standard_search',
+                    'analyzer'        => 'standard_analyzer',
+                    'search_analyzer' => 'standard_search',
                 ],
             ]
         );
