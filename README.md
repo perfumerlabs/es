@@ -15,7 +15,7 @@ docker run \
 Environment variables
 =====================
 
-- ES_HOST - Elasticsearch instance url (without http://). Required.
+- ES_HOST - Elasticsearch instance url. Required.
 - ES_PORT - Elasticsearch instance port. Default is 9200.
 
 Volumes
