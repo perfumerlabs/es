@@ -7,8 +7,9 @@ Installation
 ```bash
 docker run \
 -p 80:80/tcp \
--e ES_HOST=elasticsearch
--e ES_PORT=9200
+-e ES_HOST=elasticsearch \
+-e ES_PORT=9200 \
+-d perfumerlabs/es:v1.0.0
 ```
 
 Environment variables
