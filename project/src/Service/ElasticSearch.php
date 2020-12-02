@@ -104,7 +104,7 @@ class ElasticSearch
             ]
         );
 
-        $mapping->send();
+        $mapping->send(['include_type_name' => true]);
 
         error_log(sprintf('Mapping of index "%s" is defined', $index));
     }
@@ -112,10 +112,11 @@ class ElasticSearch
     /**
      * Search in index by fields, search word and locale
      *
-     * @param string       $index
-     * @param array|string $fields
-     * @param string       $searchWord
-     * @param string       $locale
+     * @param string $index
+     * @param string $searchWord
+     * @param string $locale
+     * @param int $from
+     * @param int $size
      * @return array
      */
     public function search(
