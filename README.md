@@ -9,7 +9,7 @@ docker run \
 -p 80:80/tcp \
 -e ES_HOST=elasticsearch \
 -e ES_PORT=9200 \
--d perfumerlabs/es:v1.0.0
+-d perfumerlabs/es:v1.1.1
 ```
 
 Environment variables

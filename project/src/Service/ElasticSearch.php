@@ -36,26 +36,21 @@ class ElasticSearch
                 'settings' => [
                     'analysis' => [
                         'analyzer' => [
-                            'my_search_analyzer' => [
+                            'my_analyzer'       => [
                                 'type'      => 'custom',
                                 'tokenizer' => 'standard',
                                 'filter'    => [
                                     'lowercase',
                                     'russian_morphology',
-                                    'my_stopwords'
+                                    'english_morphology',
+                                    'my_stopwords',
                                 ],
                             ],
-                            //                        'analyzer' => [
-                            //                            'standard_analyzer' => [
-                            //                                'char_filter' => ['html_strip'],
-                            //                                'tokenizer'   => 'standard',
-                            //                                'filter'      => ['lowercase'],
-                            //                            ],
-                            //                            'standard_search'   => [
-                            //                                'char_filter' => ['html_strip'],
-                            //                                'tokenizer'   => 'lowercase',
-                            //                            ],
-                            //                        ],
+                            'standard_analyzer' => [
+                                'char_filter' => ['html_strip'],
+                                'tokenizer'   => 'standard',
+                                'filter'      => ['lowercase'],
+                            ],
                         ],
                         'filter'   => [
                             'my_stopwords' => [
@@ -110,20 +105,16 @@ class ElasticSearch
                 ],
                 'title'  => [
                     'type'     => 'text',
-                    //                    'analyzer'        => 'standard_analyzer',
-                    'analyzer' => 'my_search_analyzer',
-                    //                    'search_analyzer' => 'standard_search',
+                    'analyzer' => 'my_analyzer',
                 ],
                 'text'   => [
                     'type'     => 'text',
-                    'analyzer' => 'my_search_analyzer',
-                    //                    'analyzer'        => 'standard_analyzer',
-                    //                    'search_analyzer' => 'standard_search',
+                    'analyzer' => 'my_analyzer',
                 ],
             ]
         );
 
-//        $mapping->send(['include_type_name' => true]);
+        $mapping->send();
 
         error_log(sprintf('Mapping of index "%s" is defined', $index));
     }
@@ -155,25 +146,30 @@ class ElasticSearch
             'query' => [
                 'bool' => [
                     'must'   => [
-                        'multi_match' => [
-                            'query'    => $searchWord,
-                            'fields'   => [
-                                'title',
-                                'text',
+                        'bool' => [
+                            'should' => [
+                                [
+                                    'multi_match' => [
+                                        'query'  => $searchWord,
+                                        'fields' => [
+                                            'title',
+                                            'text',
+                                        ],
+                                    ],
+                                ],
+                                [
+                                    'multi_match' => [
+                                        'query'    => $searchWord,
+                                        'fields'   => [
+                                            'title',
+                                            'text',
+                                        ],
+                                        'type'     => 'phrase_prefix',
+                                        'analyzer' => 'standard',
+                                    ],
+                                ],
                             ],
-                            'analyzer' => 'my_search_analyzer',
-                            'type'     => 'phrase_prefix',
-                        ]
-                        //                        'bool' => [
-                        //                            'should' => [
-                        //                                [
-                        //                                    'match' => ['title' => $searchWord],
-                        //                                ],
-                        //                                [
-                        //                                    'match' => ['text' => $searchWord],
-                        //                                ]
-                        //                            ],
-                        //                        ],
+                        ],
                     ],
                     'filter' => [
                         'term' => [
