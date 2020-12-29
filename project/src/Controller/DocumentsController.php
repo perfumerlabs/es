@@ -37,20 +37,24 @@ class DocumentsController extends LayoutController
             $this->forward('error', 'badRequest', ["Documents were not provided"]);
         }
 
+        $docs_to_index = [];
+
         foreach ($documents as &$document) {
             $code = $document['code'] ?? null;
             $text = $document['text'] ?? null;
             $locale = $document['locale'] ?? null;
 
-            $this->validateNotEmpty($code, 'code');
-            $this->validateNotEmpty($locale, 'locale');
-            $this->validateNotEmpty($text, 'text');
+            if (!$code || !$text || !$locale) {
+                continue;
+            }
 
             $document['id'] = $code . '_' . $locale;
+
+            $docs_to_index[] = $document;
         }
 
         /** @var ElasticSearch $elasticsearch */
         $elasticsearch = $this->s('elasticsearch');
-        $elasticsearch->addDocuments($index, $documents);
+        $elasticsearch->addDocuments($index, $docs_to_index);
     }
 }
